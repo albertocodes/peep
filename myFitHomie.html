@@ -1,0 +1,386 @@
+
+<html lang = "en">
+    <head>
+        <title>MyFitHomie</title>
+            <h1 style="color:white;">MyFitHomie</h1>
+			
+    </head>
+<body>
+		
+    <h3 style="color:white;">This application will calculate your BMR, or the energy your body needs, <br>
+    and generate a meal plan that will help the user lose weight.</h3>
+    <br>
+    <form> 
+    
+        <h3 style="color:white;">Basic Questions: </h3> 
+        <p style="color:white;"> Please select your gender:</p>
+        <select id = "genderChoice">
+            <option></option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+        <br><br>
+        <input type="button" onclick="selectGender()" value="Submit"/>
+        <input type="button" onclick="enableGender()" value="Cancel"/>
+    </form>
+    <br>
+    
+    <form> 
+        <p style="color:white;">Please select how active you are:</p>
+        <select id = "exerciseChoice">
+            <option></option>
+            <option>Very Active</option>
+            <option>Moderate</option>
+            <option>Sedentary</option>
+        </select>
+        <br><br>
+        <input type="button" onclick="selectExercise()" value="Submit"/>
+        <input type="button" onclick="enableExercise()" value="Cancel"/>
+    </form>
+    
+    <h3 style="color:white;">Measurements: </h3>
+    <form id="measure">
+        <p style="color:white;">Weight:</p> <input type="text" id="weight"><br>
+        <br>
+        <p style="color:white;"> Age:</p>  <input type="text" id="age"><br>
+        <br>
+        <p style="color:white;"> Height (Feet): </p> <input type="text" id="feet"><br>
+        <br>
+        <p style="color:white;"> Height (Inches): </p> <input type="text" id="inches"><br>
+        <br>
+        <input type="button" onclick="calorieCalculator()" value="Submit"/>
+        <input type="button" onclick="resetCalorieCalculator()" value="Clear"/>
+    </form>
+    
+    <h3 style="color:white;">Goals: </h3>
+    <form>
+        <p style="color:white;"> Select how much weight you would like to lose a week: </p>
+        <select id = "goal">
+            <option></option>
+            <option>0.5 Pound</option>
+            <option>1 Pound</option>
+            <option>1.5 Pounds</option>
+            <option>2 Pounds</option>
+        </select>
+        <br><br>
+        <input type="button" onclick="selectGoal()" value="Submit"/>
+        <input type="button" onclick="enableGoal()" value="Cancel"/>
+    </form>
+    >>>>>>>>>>>>>>>>>>>>>>>>
+    <h3 style="color:white;">Calculate</h3>
+    <form>
+        <input type="button" onclick="calculate()" value="PRESS ONLY ONCE YOU COMPLETE THE FORM!"/>
+    </form>
+    <br>
+    <h3 style="color:white;">Random Exercise Generator</h3>
+    <form>
+        <p style="color:white;"> Lifting Weights?</p>
+        <select id="weights">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+        </select>
+        <br><br>
+        <input type="button" onclick="weights()" value = "Submit"/>
+        <input type="button" onclick="enableWeights()" value = "Cancel"/>
+    </form>
+    <br>
+    <form>
+        <p style="color:white;">Cardio?</p>
+        <select id="cardio">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+        </select>
+        <br><br>
+        <input type="button" onclick="cardio()" value = "Submit"/>
+        <input type="button" onclick="enableCardio()" value = "Cancel"/>
+    </form>
+    
+    <script> //PROGRAM START
+        function selectGender(){ //gets input 
+            document.getElementById("genderChoice").disabled=true;
+            var gender = document.getElementById("genderChoice").value;
+            return gender;
+        }
+        
+        function enableGender(){ //enable gender button
+            document.getElementById("genderChoice").disabled=false;
+        }
+        
+        function selectExercise(){ //gets input
+            document.getElementById("exerciseChoice").disabled=true;
+            var choice = document.getElementById("exerciseChoice").value;
+            return choice;
+        }
+        
+        function enableExercise(){ //enable active button
+            document.getElementById("exerciseChoice").disabled=false;
+        }
+        
+         function selectGoal(){ //Function will see how much weightloss in 1 week
+            document.getElementById("goal").disabled=true;
+            var weightLoss = document.getElementById("goal").value;
+             if(weightLoss == "0.5 Pound"){
+                 weightLoss = .5;
+             }
+             else if(weightLoss == "1 Pound"){
+                 weightLoss = 1;
+             }
+             else if(weightLoss == "1.5 Pounds"){
+                 weightLoss = 1.5;
+             }
+             else if(weightLoss == "2 Pounds"){
+                 weightLoss = 2;
+             }
+             else{
+                 alert("Invalid");
+             }
+             return weightLoss;
+        }
+         function enableGoal(){ //enable goal button
+            document.getElementById("goal").disabled=false;
+         }
+        
+        function calorieCalculator(){
+            var gender = selectGender();
+            var activity = selectExercise();
+            
+            //gets information from the form
+            var weight = parseInt(document.getElementById("weight").value);
+            var age = parseInt(document.getElementById("age").value);
+            var feet = parseInt(document.getElementById("feet").value);
+            var inches = parseInt(document.getElementById("inches").value);
+            
+            //convert height into centimeters
+            var centimeters = feet * 12;
+            var centimeters = centimeters + inches;
+            var centimeters = centimeters * 2.54;
+            
+            //convert weight to kg
+            var kilograms = weight * .453592;
+            
+            //Check active levels
+            if(activity == "Very Active"){
+                activity = 400;
+            }
+            else if(activity == "Moderate"){
+               activity = 200;
+            }
+            else if(activity == "Sedentary"){
+                activity = 0;
+            }
+            else{
+                alert("Error chief");
+            }
+            
+            var BMR;
+            //Men
+            if(gender == "Male"){
+                BMR = (10 * kilograms) + (6.25 * centimeters) - (5 * age) + 5;
+                BMR = Math.round(BMR);
+                BMR = BMR + activity; //Add more calories you may consume
+            }
+            //Women
+            else if(gender == "Female"){
+                BMR = (10 * kilograms) + (6.25 * centimeters) - (5 * age) -161;
+                BMR = Math.round(BMR);
+                BMR = BMR + activity; //Add more calories you may consume
+            }
+            else{
+                alert("Invalid input");
+            }
+            return BMR;
+        }
+        
+        function resetCalorieCalculator(){
+            document.getElementById("measure").reset();
+        }
+        
+        function dailyCaloricGoal(){
+            //Get both your BMR and how much weight you would like to lose
+            var bmr = calorieCalculator();
+            var calorieDeficit = selectGoal();
+            var maxCal = 0;
+            
+            if(calorieDeficit == 2){
+                maxCal = bmr - 1000;
+                return maxCal;
+            }
+            else if(calorieDeficit == 1.5){
+                maxCal = bmr - 750;
+                return maxCal;
+            }
+            else if(calorieDeficit == 1){
+                maxCal = bmr - 500;
+                return maxCal;
+            }
+            else if(calorieDeficit == .5){
+                maxCal = bmr - 250;
+                return maxCal;
+            }
+            else{
+                alert("incorrect input");
+            }
+        }
+        
+        function pickNum(){ //number 0,1,2
+            var x = Math.floor(Math.random() * 3);
+            return x;
+        }
+        
+        function breakfast(){
+            var bFastMain = [
+                ["1/2 Cup Oatmeal", 150],
+                ["1/2 Cup Protein pancakes", 190],
+                ["2 Eggs", 140]
+            ];
+            var bFastSecond = [
+                ["1 Cup of Almond milk", 60],
+                ["1 Cup of Orange juice", 100],
+                ["Water", 0]
+            ];
+            var bFastThird = [
+                ["1 Banana", 105],
+                ["1 Apple", 95],
+                ["1 Cup of Strawberries", 50]
+            ];
+            
+            var choice = pickNum(); //random num 0,1,2
+            var breakfastString = "";
+            var breakfastCalories = 0;
+            
+            breakfastString = breakfastString + bFastMain[choice][0];
+            breakfastCalories = breakfastCalories + bFastMain[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            breakfastString = breakfastString + ", " + bFastSecond[choice][0];
+            breakfastCalories = breakfastCalories + bFastSecond[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            breakfastString = breakfastString + ", " + bFastThird[choice][0];
+            breakfastCalories = breakfastCalories + bFastThird[choice][1];
+            
+            document.write("Breakfast: <br>");
+            document.write(breakfastString);
+            document.write("<br>");
+            document.write(" TOTAL CALORIES: " + breakfastCalories);
+            document.write("<br><br>");
+            
+        }
+        
+        function lunch(){
+            var lunchProtein = [
+                ["8 Ounces of Chicken Breast", 250],
+                ["4 Ounces of Ground Beef", 230],
+                ["8 Ounces of Tilapia", 220]
+            ];
+            var lunchCarbs = [
+                ["1 Cup of Rice", 200],
+                ["1 Cup Sweet Potato", 180],
+                ["1 Cup cooked Beans", 230]
+            ];
+            var lunchVeggies = [
+                ["1 Cup Spinach", 10],
+                ["1 Cup Broccoli", 30],
+                ["1 Cup Carrots", 50]
+            ];
+            
+            var choice = pickNum(); //random num 0,1,2
+            var lunchString = "";
+            var lunchCalories = 0;
+            
+            lunchString = lunchString + lunchProtein[choice][0];
+            lunchCalories = lunchCalories + lunchProtein[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            lunchString = lunchString + ", " + lunchCarbs[choice][0];
+            lunchCalories = lunchCalories + lunchCarbs[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            lunchString = lunchString + ", " + lunchVeggies[choice][0];
+            lunchCalories = lunchCalories + lunchVeggies[choice][1];
+            
+            document.write("Lunch: <br>");
+            document.write(lunchString);
+            document.write("<br>");
+            document.write(" TOTAL CALORIES: " + lunchCalories);
+            document.write("<br><br>");
+
+
+        }
+        
+        function dinner(){
+            var dinnerProtein = [
+                ["1 Can of Tuna", 210],
+                ["6 Ounces of Ground Turkey", 265],
+                ["8 Ounces of Chicken Breast", 250]
+            ];
+            var dinnerCarbs = [
+                ["1 Cup of Rice", 200],
+                ["1 Cup Sweet Potato", 180],
+                ["1 Cup Beans", 230]
+            ];
+            var dinnerVeggies = [
+                ["1/2 Cup Peas", 65],
+                ["1 Cup Broccoli", 30],
+                ["1 Cup Carrots", 50]
+            ];
+            
+            var choice = pickNum(); //random num 0,1,2
+            var dinnerString = "";
+            var dinnerCalories = 0;
+            
+            dinnerString = dinnerString + dinnerProtein[choice][0];
+            dinnerCalories = dinnerCalories + dinnerProtein[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            dinnerString = dinnerString + ", " + dinnerCarbs[choice][0];
+            dinnerCalories = dinnerCalories + dinnerCarbs[choice][1];
+                        
+            choice = pickNum(); //random num 0,1,2
+            dinnerString = dinnerString + ", " + dinnerVeggies[choice][0];
+            dinnerCalories = dinnerCalories + dinnerVeggies[choice][1];
+            
+            document.write("Dinner: <br>");
+            document.write(dinnerString);
+            document.write("<br>");
+            document.write(" TOTAL CALORIES: " + dinnerCalories);
+            document.write("<br><br>");
+
+        }
+        
+        function calculate(){
+            var x = dailyCaloricGoal();
+            document.getElementById("gang").innerHTML = x;
+        }
+        
+        function weights(){
+            document.getElementById("exerciseChoice").disabled=false;
+        }
+        
+        function enableWeights(){
+            document.getElementById("exerciseChoice").disabled=false;
+        }
+        
+        function cardio(){
+            document.getElementById("exerciseChoice").disabled=false;
+        }
+        
+        function enableCardio(){
+            document.getElementById("exerciseChoice").disabled=false;
+        }
+		
+		document.body.style.background = "#ceff5d url('https://wallpaperplay.com/walls/full/7/2/2/32755.jpg') no-repeat";
+        
+       var myString = "MyFitHomie";
+			var myRegExp = /MyFitHomie/gi;
+			myString = myString.replace(myRegExp, "Lets get healthy homie!!");
+			alert(myString);
+        
+		var theDate = new Date();
+		document.write(theDate);
+    </script>
+    <p id="gang"></p>
+</body>
+</html>
