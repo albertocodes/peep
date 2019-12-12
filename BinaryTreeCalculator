@@ -1,0 +1,206 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <cstring>
+using namespace std;
+
+class BinaryTree
+{
+  private:
+
+    struct node
+    {
+      int data;
+      node* left;
+      node* right;
+    };
+
+    node* root;
+    void addLeafPrivate(int data, node* pointer);
+    void printPrivate(node* pointer);
+
+  public:
+    //constructor
+    BinaryTree();
+    node* makeLeaf(int data);
+    void addLeaf(int data);
+    void printPublic();
+};
+
+void introduction()
+{ 
+  cout << "\n";
+  cout << "This program will accept two values, and perform different calculations to whatever the user wants it to do. Will store the value in a binary tree, and will print the all the values INORDER style.\n";
+  cout << "\n";
+}
+
+BinaryTree::BinaryTree()
+{
+    //When we create it, we don't want it pointing to anything
+    root = NULL;
+}
+
+BinaryTree::node* BinaryTree::makeLeaf(int data)
+{
+  //n = new node
+  node* n = new node;
+  n->data = data;
+  n->left = NULL;
+  n->right = NULL;
+  return n;
+}
+
+void BinaryTree::addLeaf(int data)
+{
+  addLeafPrivate(data, root); //search for the right location
+}
+
+void BinaryTree::addLeafPrivate(int data, node* pointer)
+{
+  //if our root isn't pointing to anything, the tree is empty
+  if(root == NULL)
+  {
+    root = makeLeaf(data);
+  }
+  //the tree is pointing to something, so is it higher or less? In other words, if the data is less the node, it will go to the left, and it will continue calling the same function, over and over again
+  else if(data < pointer->data)
+  {
+    if(pointer->left !=NULL)
+    { //If there's something already just add a leaf
+      addLeafPrivate(data, pointer->left);
+    }
+    else //it's null so create a leaf
+    {
+      pointer->left = makeLeaf(data);
+    }
+  }
+  //This will traverse to the right
+  else if(data > pointer->data)
+  {
+    if(pointer->right !=NULL)
+    {//If the right is not null, add a leaf
+      addLeafPrivate(data, pointer->right);
+    }
+    else //It is null, so add create a leaf
+    {
+      pointer->right = makeLeaf(data);
+    }
+  }
+  else //Repeated Integer
+  {
+    cout << "Already passed: " << data << " into the function.\n";
+  }
+}
+
+void BinaryTree::printPublic()
+{
+  printPrivate(root);
+}
+
+void BinaryTree::printPrivate(node* pointer)
+{
+  if(root!= NULL) //Something Exists
+  {
+    if(pointer->left != NULL) //Starts all the way to the left, because that's where the lowest numbers will be when you sort them InOrder style
+    {
+      //Continues calling itself until the statement is true
+      printPrivate(pointer->left);
+    }
+    cout << pointer->data << " ";
+    if(pointer->right != NULL)
+    {//Recursion Function
+      printPrivate(pointer->right);
+    }
+  }
+  else
+  {
+    cout << "Empty...\n";
+  }
+}
+
+int getValue()
+{
+      int firstNum, secondNum, value;
+      char operand;
+      cout << "Enter your first value: \n";
+      cin >> firstNum;
+
+      bool cont = false;
+      do
+      {
+        cout << "Enter an operand: (+, -, *, /)\n";
+        cin >> operand;
+        //input validation
+        if(operand == '+' || operand == '-' || operand == '/' || operand == '*')
+        {
+        cont = true;
+        }
+      }
+      while(!cont);
+
+      cout << "Enter your second value: \n";
+      cin >> secondNum;
+
+      if(operand == '+')
+      {
+        value = firstNum + secondNum;
+        return value;
+      }
+
+      else if(operand == '/')
+      {
+        value = firstNum / secondNum;
+        return value;
+      }
+
+      else if(operand == '-')
+      {
+        value = firstNum - secondNum;
+        return value;
+      }
+
+      else if(operand == '*')
+      {
+        value = firstNum * secondNum;
+        return value;
+      }
+
+     // else
+      {
+        cout << "You messed up somewhere chief.\n";
+      }
+      return 0;
+}
+
+int main() {
+  //create your binary tree object that will hold values
+  BinaryTree buildTree;
+
+  //Display the Introduction
+  introduction();
+
+  //continue function
+  bool cont = false;
+  char response;
+
+  do
+  {
+  int x = getValue();
+  buildTree.addLeaf(x);
+
+  //Continue Adding?
+  cout << "Add more numbers into your binary tree? (y/n) \n";
+  cin >> response;
+  if(response == 'n' || response == 'N')
+  {
+    cont = true;
+  }
+  }
+  while(!cont);
+
+  //print
+  cout << "Here is your personal customized binary tree in order from least to greatest: \n";
+  buildTree.printPublic();
+
+  return 0;
+}
